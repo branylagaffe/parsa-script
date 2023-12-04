@@ -1,4 +1,18 @@
 #!/usr/bin/env bash
+# 
+#                                    _   _                    
+#                                   | | | |                   
+#  _ __   _____      __   __ _ _   _| |_| |__   ___  _ __ ___ 
+# | '_ \ / _ \ \ /\ / /  / _` | | | | __| '_ \ / _ \| '__/ __|
+# | | | |  __/\ V  V /  | (_| | |_| | |_| | | | (_) | |  \__ \
+# |_| |_|\___| \_/\_/    \__,_|\__,_|\__|_| |_|\___/|_|  |___/
+#                                                             
+#                                                             
+# 
+# Created Date: Monday, December 4th 2023, 12:05:26 am
+# Author: Bryan `Brany` Perdrizat
+# 
+
 
 # Quit on first error
 set -e
@@ -14,12 +28,13 @@ if [ "$#" -ne 3 ]; then
 fi
 
 # Parse arguement
-# Split <repos dir>:<branch> into two different variable
+# Split <repos dir>:<branch> into two differents variables
 src_repo=$(echo ${1} | awk -F':' '{ print $1 }')
 src_branch=$(echo ${1} | awk -F':' '{ print $2 }')
 target_repo=$(echo ${2} | awk -F':' '{ print $1 }')
 target_branch=$(echo ${2} | awk -F':' '{ print $2 }')
 
+# Get pathname for each repo
 src_dir=$(realpath ${src_repo})
 target_dir=$(realpath ${target_repo})
 
@@ -41,6 +56,7 @@ target_author=$(git -C ${target_dir} log --format="%ae" ${target_branch} | sort 
 # Create diff between source and target repository | get the new addition | and remove the '>' char
 new_authors=$(diff <(echo "$src_author") <(echo "$target_author") | egrep "^>" | sed 's/> //g')
 
+# Display new authors
 echo -e ">> NEW: ${new_authors}" | tr '\n' ' '
 
 # Output the author onto a file
